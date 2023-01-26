@@ -1,0 +1,24 @@
+/**
+Write a function int CountOdd(int A[], int n) which will count and return the number of odd values in array A
+**/
+
+#include <stdio.h>
+#define MAX 8
+
+int CountOdd(int A[], int n)
+{
+	int i, count;
+	for (i=0;i<n;i++)
+	{
+		if (A[i] % 2 == 1)
+			count++;
+	}
+	return count;
+}
+
+int main()
+{
+	int A[MAX] = {10, 23, 31, 43, 55, 69, 70, 88};
+	printf("%d", CountOdd(A, MAX));
+	return 0;
+}
