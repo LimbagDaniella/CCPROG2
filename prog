@@ -1,0 +1,175 @@
+//Do NOT modify the contents of this file
+
+#include <stdio.h>
+#define SIZE 9
+
+int isInRange(int num)
+{
+	int nReturn = 0;
+	
+	if (num <= 9 && num >= 1)
+		nReturn = 1;
+		
+	return nReturn;
+}
+
+void getInput(int aMatrix[][SIZE])
+{
+	int i, j;
+	
+	for(i=0;i<SIZE;i++){
+		for(j=0;j<SIZE;j++){
+			scanf("%d", &aMatrix[i][j]);
+		}
+	}
+}
+
+void displayRow(int aRow[])
+{
+	int i;
+	
+	for(i=0;i<SIZE;i++)
+	{
+		if((i>0) && (i%3==0))
+			printf("\t");
+		printf("%d ", aRow[i]);
+	}
+}
+
+void displayAll(int aMatrix[][SIZE])
+{
+	int i;
+	
+	for(i=0;i<SIZE;i++)
+	{
+		displayRow(aMatrix[i]);
+		if(i>0 && (i+1)%3==0)
+			printf("\n");
+		printf("\n");
+	}
+}
+
+int checkrow(int aData[])
+{
+	int i, j, valid = 1;
+    for (i = 0; i < SIZE; i++) {
+        if (aData[i] < 1 || aData[i] > 9) {
+            valid = 0;
+        }
+        for(j=i+1;j<SIZE;j++) {
+            if(aData[j] == aData[i])
+                valid = 0;
+        }
+    }
+	return valid;
+}
+
+int checkcol(int aMatrix[][SIZE], int nColInd)
+{
+	int i, j, valid = 1;
+    for (i = 0; i < SIZE; i++) {
+        if (aMatrix[i][nColInd] < 1 || aMatrix[i][nColInd] > 9) {
+            valid = 0;
+        }
+        for(j=i+1;j<SIZE;j++) {
+            if(aMatrix[j][nColInd] == aMatrix[i][nColInd])
+                valid = 0;
+        }
+    }
+	return valid;
+}
+
+int checkbox(int aMatrix[][SIZE], int nRow, int nCol)
+{
+	int i, j, valid = 1;
+	int nCheck[SIZE] = {0};
+    for (i = nRow; i < nRow + 3; i++) {
+        for (j = nCol; j < nCol + 3; j++) {
+            if (aMatrix[i][j] < 1 || aMatrix[i][j] > 9) {
+                valid = 0;
+            }
+            if (nCheck[aMatrix[i][j] - 1] == 1) {
+                valid = 0;
+            }
+            nCheck[aMatrix[i][j] - 1] = 1;
+        }
+    }
+    return valid;
+}
+
+/* Tasks : Implement each and every function indicated
+           in sudoku.h.  You are not allowed to modify
+		   the parameter list or the return type.  Other
+		   constraints and requirements are indicated in 
+		   the instructions in the pdf file.
+		   
+		   Complete the main program based on the 
+		   comments indicated.
+*/
+
+int
+main()
+{   int aMatrix[SIZE][SIZE];
+    /* you can add your own variables */
+    int i, j, valid = 1;
+    
+    /* call getInput().  It is encouraged that you use
+       input redirection, so you do not need to keep 
+       typing a set of values.  Modify file containing
+       the input values to consider other test cases OR
+       create other files of input values per test case.
+    */
+    getInput(aMatrix);
+
+	/* call displayAll() to verify that you got the inputs 
+	   correctly.  Note the expected format of the displayed
+	   result.
+	*/ 
+	
+	displayAll(aMatrix);
+	
+	/* call function checkrow() multiple times in loop.
+	   Note that checkrow() will check one row at a time.
+	*/
+	for(i=0;i<SIZE;i++)
+	{
+		if (!(checkrow(aMatrix)))
+			valid = 0;
+	}
+	/* write your condition to execute the following only 
+	   if all rows are still correct.  Call function
+	   checkcol() mutiple times in a loop. checkcol() will
+	   check one column at a time.
+	*/
+	i=0;
+	do
+	{
+		if (!(checkcol(aMatrix, i)))
+			valid = 0;
+		i++;
+	}while(i <= SIZE);
+	/* write your condition to execute the following only 
+	   if all rows and columns are still correct.  Call 
+	   function checkbox() mutiple times as the function will
+	   check one 3x3 box at a time.
+	*/
+	for(i=0;i<SIZE;i++)
+	{
+	    for(j=0;j<SIZE;j++){
+    		if (!(checkbox(aMatrix, j, i)))
+    			valid = 0;
+	    }
+	}
+	/* if the matrix is a correctly solved Sudoku puzzle, 
+	   display "Sudoku!".  Otherwise display "Wrong Solution". 
+	   While debugging, it is suggested that you include
+	   in the display which row or column or box the  
+	   wrong solution was [first] detected. 
+	*/
+	if (valid == 1)
+		printf("Sudoku!");
+	else
+		printf("Wrong Solution");
+
+    return 0;
+}
